@@ -3,37 +3,38 @@
     --Кульковця Віктора Васильовича             
     --Варіант 3
     
-    import System.Directory.Internal.Prelude (getArgs)
+import System.Directory.Internal.Prelude (getArgs)
+import Data.Char(toUpper)
+import Distribution.Fields.LexerMonad (getInput)
+factors n = [x | x <- [1..n], mod n x == 0]
+showBool :: Bool -> String
+showBool = map toUpper . show
+prime n = showBool(factors n == [1,n])
 
-    removeDuplicates :: Eq a => [a] -> [a]
-    removeDuplicates = foldl (\seen x -> if x `elem` seen
-                                         then seen
-                                         else seen ++ [x]) []
+main :: IO ()
+main = do
+   putStrLn "Please input a number."
+   inputjar <- getLine 
+   let x = (read inputjar :: Int)
+   print (prime x)
 
-    f :: [Int] -> [String]
-    f = map show
-
-    main :: IO ()
-    main = do 
-    --read from console
-    input_array <- getLine 
-    let parsed_array = map read $ words input_array :: [Int]
-
-    --write in console
-    print ( removeDuplicates parsed_array )
-
-    --read from file
-    contents <- readFile "input.txt" 
-    let parsed_from_file = map read $ words contents :: [Int] 
-    print ( removeDuplicates parsed_from_file )
-
-    --write into file
-    let output = removeDuplicates parsed_from_file
-    writeFile "output.txt" (concat (f output))
-
-    -- Тестування
-    -- У файлі для введення: 3 3 3 5 5 5 12 12 12 12
-    -- Результат у файлі для виведення: 3 5 12
-
+    --from console write into file
+main1 = do
+   putStrLn "Please input a number."
+   inputjar <- getLine 
+   let x = (read inputjar :: Int)
+   writeFile "output.txt" (prime x)
+    --from file write into file
+main2=do
+    inputjar<-readFile "input.txt"
+    let x = (read inputjar :: Int)
+    writeFile "output.txt" (prime x)
+    
+ --from file write into console
+main3=do
+    inputjar<-readFile "input.txt"
+    let x = (read inputjar :: Int)
+    print (prime x)
+    
 
     -- Висновок: На даній лабораторній роботі ми навчилися працювати з потоками введення та виведення у консолі та файлах
